@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HomeLink - Find Your Dream Home</title>
+  <style>
+    /* General Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url("f1ed3a62-d42a-41f5-8f53-7b72eb3bece8.jpeg") no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: auto; padding: 1rem; }
+    header {
+      background: rgba(44, 62, 80, 0.85);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    nav .logo { font-weight: bold; font-size: 1.5rem; color: #2c3e50; }
+    nav ul { display: flex; list-style: none; gap: 1.5rem; }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    button, .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover, .btn:hover { background: #2980b9; }
+    .btn-outline { background: transparent; border: 1px solid #3498db; color: #3498db; }
+    .btn-outline:hover { background: #3498db; color: white; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 5rem 1rem;
+      background: url("9a8c15c4-9b40-4cae-9651-a1d17fbb3835.jpeg") no-repeat center center;
+      background-size: cover;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.55);
+      border-radius: 15px;
+      z-index: 0;
+    }
+    .hero h2, .hero p, .hero .search-bar {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin-bottom: 2rem;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+    }
+    .hero .search-bar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .hero input {
+      padding: 0.7rem;
+      border: none;
+      border-radius: 5px;
+      min-width: 250px;
+      font-size: 1rem;
+    }
+
+    /* Property Cards */
+    .properties {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .property-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .property-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .property-info {
+      padding: 1rem;
+    }
+    .property-info h3 {
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #3498db;
+    }
+
+    /* Map */
+    #map {
+      height: 400px;
+      width: 100%;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { flex-direction: column; gap: 1rem; }
+      .hero { padding: 3rem 1rem; }
+      .hero h2 { font-size: 1.8rem; }
+      .dashboard { grid-template-columns: 1fr; }
+      nav ul { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🏡 HomeLink</h1>
+    <p>Find your dream home or list your property</p>
+  </header>
+
+  <nav id="navbar">
+    <div class="logo">HomeLink</div>
+    <ul id="navLinks">
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="showPage('listings')">Properties</a></li>
+      <li id="dashboardLink" style="display:none;"><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
+      <li id="loginLink"><a href="#" onclick="showPage('login')">Login</a></li>
+      <li id="registerLink"><a href="#" onclick="showPage('register')">Register</a></li>
+      <li id="logoutLink" style="display:none;"><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="container" id="app"></div>
+
+  <!-- Google Maps API -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+  <script>
+    // --- Only showing where we modified the "home" page ---
+    function showPage(page) {
+      const app = document.getElementById('app');
+      let html = '';
+
+      if (page === 'home') {
+        html = `
+          <div class="hero">
+            <h2>Welcome to HomeLink</h2>
+            <p>Find your perfect rental or home for sale. Connect with verified agents and landlords.</p>
+            <div class="search-bar">
+              <input type="text" id="searchQuery" placeholder="Search by location..." />
+              <button onclick="searchProperties()">Search</button>
+            </div>
+          </div>
+          <div id="map"></div>
+          <h3>Featured Properties</h3>
+          <div class="properties" id="propertyList"></div>
+        `;
+      }
+      // (other pages stay the same...)
+
+      app.innerHTML = html;
+      if (page === 'home' || page === 'listings') {
+        if (typeof google === 'undefined') {
+          loadGoogleMapsScript();
+        } else {
+          initMap();
+        }
+        displayProperties();
+      }
+    }
+  </script>
+</body>
+</html>
